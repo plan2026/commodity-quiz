@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<title>اختبار التخطيط الاستراتيجي</title>
+
+<style>
+body{
+font-family: Arial;
+background:#f4f6f8;
+padding:40px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.option{
+border:1px solid #ddd;
+padding:12px;
+margin:10px 0;
+cursor:pointer;
+border-radius:8px;
+}
+
+.option:hover{
+background:#f2f2f2;
+}
+
+.correct{
+background:#d4edda;
+}
+
+.incorrect{
+background:#f8d7da;
+}
+
+button{
+padding:10px 20px;
+margin-top:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>اختبار مبادئ التخطيط الاستراتيجي</h2>
+
+<div id="quiz"></div>
+
+<button onclick="nextQuestion()">السؤال التالي</button>
+
+</div>
+
+<script>
+
+const questionBank = [
+
+{
+text:"بدأت جهة حكومية إعداد خطتها دون الرجوع للاستراتيجية الوطنية. ما المشكلة؟",
+options:[
+"غياب الترابط العمودي",
+"ضعف الموارد",
+"قلة الموظفين",
+"ضعف التدريب"
+],
+correct:0
+},
+
+{
+text:"اعتمد فريق التخطيط على الانطباعات بدلاً من البيانات. ما الخلل؟",
+options:[
+"غياب التخطيط المبني على الأدلة",
+"زيادة الابتكار",
+"زيادة الموارد",
+"تحسن الأداء"
+],
+correct:0
+},
+
+{
+text:"لم تتم مشاركة الإدارات الأخرى في إعداد الخطة. ما النتيجة؟",
+options:[
+"ضعف التملك المؤسسي",
+"زيادة الابتكار",
+"زيادة الموارد",
+"تحسن التنفيذ"
+],
+correct:0
+}
+
+];
+
+let currentQuestion = 0;
+
+function renderQuestion(){
+
+let q = questionBank[currentQuestion];
+
+let html = `<h3>${q.text}</h3>`;
+
+q.options.forEach((option,index)=>{
+
+html += `
+<div class="option" onclick="selectOption(${index})">
+${option}
+</div>
+`;
+
+});
+
+document.getElementById("quiz").innerHTML = html;
+
+}
+
+function selectOption(index){
+
+let q = questionBank[currentQuestion];
+
+let options = document.querySelectorAll(".option");
+
+options.forEach((opt,i)=>{
+
+if(i==q.correct) opt.classList.add("correct");
+
+if(i==index && i!=q.correct) opt.classList.add("incorrect");
+
+});
+
+}
+
+function nextQuestion(){
+
+currentQuestion++;
+
+if(currentQuestion >= questionBank.length){
+
+document.getElementById("quiz").innerHTML="<h3>انتهى الاختبار</h3>";
+
+return;
+
+}
+
+renderQuestion();
+
+}
+
+renderQuestion();
+
+</script>
+
+</body>
+</html>
