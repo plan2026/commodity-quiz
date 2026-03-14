@@ -475,8 +475,9 @@
     </div>
 
     <script>
-        // بنك أسئلة التخطيط الاستراتيجي
+        // بنك أسئلة التخطيط الاستراتيجي (20 سؤالاً كاملاً)
         const questionBank = [
+            // الأسئلة المقدمة من المستخدم (مرقمة للتأكد من اكتمالها)
             {
                 text: "طلبت مؤسسة حكومية من فريق التخطيط إعداد خطة استراتيجية دون الرجوع للاستراتيجية الوطنية أو القطاعية. ما المشكلة الأساسية في هذه العملية؟",
                 options: [
@@ -839,6 +840,7 @@
             }
         ];
 
+        // متغيرات التطبيق
         let questions = [];
         let currentQuestion = 0;
         let answers = [];
@@ -846,6 +848,7 @@
         let quizCompleted = false;
         let correctCount = 0;
 
+        // دالة خلط المصفوفة
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -854,6 +857,7 @@
             return array;
         }
 
+        // تجهيز الأسئلة (خلط الأسئلة وخلط الخيارات داخلها)
         function prepareQuestions() {
             // أخذ نسخة من جميع الأسئلة
             let selectedQuestions = questionBank.map(q => ({...q}));
@@ -861,7 +865,7 @@
             // خلط الأسئلة
             selectedQuestions = shuffleArray(selectedQuestions);
             
-            // خلط الخيارات لكل سؤال
+            // خلط الخيارات لكل سؤال مع الحفاظ على الإجابة الصحيحة
             selectedQuestions = selectedQuestions.map(q => {
                 const optionsWithIndex = q.options.map((opt, idx) => ({ text: opt, originalIndex: idx }));
                 const shuffledOptions = shuffleArray([...optionsWithIndex]);
@@ -878,6 +882,7 @@
             return selectedQuestions;
         }
 
+        // تهيئة الاختبار
         function initializeQuiz() {
             questions = prepareQuestions();
             currentQuestion = 0;
@@ -895,11 +900,13 @@
             renderQuestion();
         }
 
+        // الحصول على الحرف المقابل للرقم
         function getLetter(index) {
             const letters = ['أ', 'ب', 'ج', 'د'];
             return letters[index] || 'أ';
         }
 
+        // تحديث الإحصائيات وشريط التقدم
         function updateStats() {
             document.getElementById('current-question').textContent = currentQuestion + 1;
             const answeredCount = answers.filter(a => a !== null).length;
@@ -914,6 +921,7 @@
             document.getElementById('progress-bar').style.width = `${progress}%`;
         }
 
+        // عرض السؤال الحالي
         function renderQuestion() {
             if (quizCompleted || !questions.length) return;
             
@@ -921,30 +929,9 @@
             const q = questions[currentQuestion];
             
             // تحديد أيقونة مناسبة للسؤال
-            const commodityIcon = "📋"; // أيقونة ثابتة لموضوع التخطيط
+            const commodityIcon = "📋";
             
             let html = `
                 <div class="question-card">
                     <div class="question-header">
                         <span class="question-badge">السؤال ${currentQuestion + 1} من ${questions.length}</span>
-                        <span class="commodity-tag">${commodityIcon} مبادئ التخطيط</span>
-                    </div>
-                    <div class="question-text">${q.text}</div>
-                    <div class="options-grid" id="options-container">
-            `;
-            
-            q.options.forEach((option, index) => {
-                const isSelected = answers[currentQuestion] === index;
-                const isAnswered = answered[currentQuestion];
-                const isCorrect = isAnswered && index === q.correct;
-                const isIncorrect = isAnswered && isSelected && index !== q.correct;
-                
-                let optionClass = 'option';
-                if (isSelected) optionClass += ' selected';
-                if (isCorrect) optionClass += ' correct';
-                if (isIncorrect) optionClass += ' incorrect';
-                if (isAnswered) optionClass += ' disabled-option';
-                
-                html += `
-                    <div class="${optionClass}" onclick="selectOption(${index})">
-                        <span class="option-letter">
